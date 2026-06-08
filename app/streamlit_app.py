@@ -5,7 +5,13 @@ import streamlit as st
 
 sys.path.append(str(Path(__file__).resolve().parents[1]))
 
-from src.matcher import calculate_match_score, analyze_skill_match, generate_fit_summary
+from src.matcher import (
+    calculate_match_score,
+    analyze_skill_match,
+    generate_fit_summary,
+    calculate_skill_coverage
+)
+from src.file_parser import extract_text_from_uploaded_file
 
 
 st.set_page_config(page_title="AI Resume Job Matcher", page_icon="🤖")
@@ -13,7 +19,22 @@ st.set_page_config(page_title="AI Resume Job Matcher", page_icon="🤖")
 st.title("AI Resume-to-Job Matcher")
 st.write("Compare your resume against a job description and identify matched and missing skills.")
 
-resume_text = st.text_area("Paste your resume text here", height=200)
+uploaded_resume = st.file_uploader(
+    "Upload your resume",
+    type=["pdf", "docx", "txt"]
+)
+
+resume_text = ""
+
+if uploaded_resume is not None:
+    resume_text = extract_text_from_uploaded_file(uploaded_resume)
+    st.success("Resume uploaded successfully.")
+
+    with st.expander("Preview extracted resume text"):
+        st.write(resume_text)
+else:
+    resume_text = st.text_area("Or paste your resume text here", height=200)
+
 job_description = st.text_area("Paste the job description here", height=200)
 
 if st.button("Analyze Match"):
@@ -22,9 +43,14 @@ if st.button("Analyze Match"):
     else:
         score = calculate_match_score(resume_text, job_description)
         matched_skills, missing_skills = analyze_skill_match(resume_text, job_description)
+        coverage = calculate_skill_coverage(
+            matched_skills,
+            missing_skills
+        )
         summary = generate_fit_summary(score, matched_skills, missing_skills)
 
         st.metric("Match Score", f"{score}%")
+        st.metric("Skill Coverage", f"{coverage}%")
 
         st.subheader("Fit Summary")
         st.write(summary)

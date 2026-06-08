@@ -72,6 +72,18 @@ def read_text_file(file_path):
         return file.read()
 
 
+def calculate_skill_coverage(matched_skills, missing_skills):
+    total_required = len(matched_skills) + len(missing_skills)
+
+    if total_required == 0:
+        return 100
+
+    coverage = (len(matched_skills) / total_required) * 100
+
+    return round(coverage, 2)
+
+
+
 if __name__ == "__main__":
     resume = read_text_file("data/resumes/sample_resume.txt")
     job = read_text_file("data/jobs/sample_job.txt")
