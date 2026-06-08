@@ -80,7 +80,6 @@ ai-resume-job-matcher/
 │   │   └── jobs.csv
 │   └── resumes/
 ├── src/
-│   ├── career_coach.py
 │   ├── career_insights.py
 │   ├── file_parser.py
 │   ├── job_recommender.py
@@ -245,4 +244,4 @@ Backend Developer transitioning into AI, Machine Learning, and AI Engineering.
 
 ## License
 
-This project is for learning and portfolio use. Add a license file if you plan to publish or distribute it.
+This project is for learning and portfolio use.
