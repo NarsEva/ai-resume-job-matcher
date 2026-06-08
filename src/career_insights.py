@@ -45,7 +45,19 @@ def generate_career_insights(
 
     if "REST API" in matched_skills:
         strengths.append("API development expertise")
+        
+    if "Kubernetes" in matched_skills:
+        strengths.append("Container orchestration experience")
 
+    if "PostgreSQL" in matched_skills:
+        strengths.append("Database design and SQL expertise")
+
+    if "Scikit-learn" in matched_skills:
+        strengths.append("Machine learning tooling experience")
+
+    if "AI" in matched_skills:
+        strengths.append("Artificial intelligence and LLM exposure")
+        
     learning_path = []
 
     for skill in missing_skills:
