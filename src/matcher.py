@@ -74,7 +74,7 @@ def calculate_skill_coverage(matched_skills, missing_skills):
     total_required = len(matched_skills) + len(missing_skills)
 
     if total_required == 0:
-        return 100
+        return 0
 
     coverage = (len(matched_skills) / total_required) * 100
 
