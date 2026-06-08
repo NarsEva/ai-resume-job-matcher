@@ -48,17 +48,14 @@ def analyze_skill_match(resume_text, job_description):
 
     return matched_skills, missing_skills
 
+def read_text_file(file_path):
+    with open(file_path, "r", encoding="utf-8") as file:
+        return file.read()
+
 
 if __name__ == "__main__":
-    resume = """
-    Java Spring Boot REST API SQL MySQL PostgreSQL AWS Docker Kubernetes
-    backend development microservices Git Postman Swagger
-    """
-
-    job = """
-    We are looking for a Java AI Engineer with experience in Java, Spring Boot,
-    REST APIs, AWS, Python, machine learning, and AI tools.
-    """
+    resume = read_text_file("data/resumes/sample_resume.txt")
+    job = read_text_file("data/jobs/sample_job.txt")
 
     score = calculate_match_score(resume, job)
     matched_skills, missing_skills = analyze_skill_match(resume, job)
