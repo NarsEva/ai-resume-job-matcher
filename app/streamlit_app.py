@@ -5,7 +5,7 @@ import streamlit as st
 
 sys.path.append(str(Path(__file__).resolve().parents[1]))
 
-from src.matcher import calculate_match_score, analyze_skill_match
+from src.matcher import calculate_match_score, analyze_skill_match, generate_fit_summary
 
 
 st.set_page_config(page_title="AI Resume Job Matcher", page_icon="🤖")
@@ -22,8 +22,12 @@ if st.button("Analyze Match"):
     else:
         score = calculate_match_score(resume_text, job_description)
         matched_skills, missing_skills = analyze_skill_match(resume_text, job_description)
+        summary = generate_fit_summary(score, matched_skills, missing_skills)
 
         st.metric("Match Score", f"{score}%")
+
+        st.subheader("Fit Summary")
+        st.write(summary)
 
         st.subheader("Matched Skills")
         if matched_skills:

@@ -48,6 +48,25 @@ def analyze_skill_match(resume_text, job_description):
 
     return matched_skills, missing_skills
 
+
+def generate_fit_summary(score, matched_skills, missing_skills):
+    if score >= 70:
+        fit_level = "Strong fit"
+    elif score >= 40:
+        fit_level = "Moderate fit"
+    else:
+        fit_level = "Low fit"
+
+    summary = f"{fit_level}. The candidate matches {len(matched_skills)} required skill(s)."
+
+    if missing_skills:
+        summary += f" To improve fit, focus on: {', '.join(missing_skills)}."
+    else:
+        summary += " No major missing skills were detected."
+
+    return summary
+
+
 def read_text_file(file_path):
     with open(file_path, "r", encoding="utf-8") as file:
         return file.read()
