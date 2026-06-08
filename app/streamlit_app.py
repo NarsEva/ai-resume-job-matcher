@@ -9,7 +9,8 @@ from src.matcher import (
     calculate_match_score,
     analyze_skill_match,
     generate_fit_summary,
-    calculate_skill_coverage
+    calculate_skill_coverage,
+    calculate_overall_fit_score
 )
 from src.file_parser import extract_text_from_uploaded_file
 
@@ -43,15 +44,14 @@ if st.button("Analyze Match"):
     else:
         score = calculate_match_score(resume_text, job_description)
         matched_skills, missing_skills = analyze_skill_match(resume_text, job_description)
-        coverage = calculate_skill_coverage(
-            matched_skills,
-            missing_skills
-        )
-        summary = generate_fit_summary(score, matched_skills, missing_skills)
+        coverage = calculate_skill_coverage(matched_skills, missing_skills)
+        overall_score = calculate_overall_fit_score(score, coverage)
+        summary = generate_fit_summary(overall_score, matched_skills, missing_skills)
 
-        st.metric("Match Score", f"{score}%")
+        st.metric("Overall Fit Score", f"{overall_score}%")
         st.metric("Skill Coverage", f"{coverage}%")
-
+        st.metric("Text Similarity Score", f"{score}%")
+        
         st.subheader("Fit Summary")
         st.write(summary)
 

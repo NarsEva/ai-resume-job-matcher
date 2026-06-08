@@ -1,13 +1,8 @@
+import re
+
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
-
-
-SKILLS = [
-    "Java", "Spring Boot", "REST API", "SQL", "MySQL", "PostgreSQL",
-    "AWS", "Docker", "Kubernetes", "Git", "Postman", "Swagger",
-    "Python", "Machine Learning", "AI", "Pandas", "NumPy",
-    "Scikit-learn", "PyTorch", "TensorFlow", "Streamlit"
-]
+from src.skills_config import SKILL_ALIASES
 
 
 def calculate_match_score(resume_text, job_description):
@@ -22,15 +17,18 @@ def calculate_match_score(resume_text, job_description):
 
 
 def extract_skills(text):
-    found_skills = []
+    found_skills = set()
+    normalized_text = normalize_text(text)
 
-    text_lower = text.lower()
+    for skill, aliases in SKILL_ALIASES.items():
+        for alias in aliases:
+            normalized_alias = normalize_text(alias)
 
-    for skill in SKILLS:
-        if skill.lower() in text_lower:
-            found_skills.append(skill)
+            if normalized_alias in normalized_text:
+                found_skills.add(skill)
+                break
 
-    return found_skills
+    return sorted(list(found_skills))
 
 
 def analyze_skill_match(resume_text, job_description):
@@ -83,6 +81,16 @@ def calculate_skill_coverage(matched_skills, missing_skills):
     return round(coverage, 2)
 
 
+def normalize_text(text):
+    text = text.lower()
+    text = re.sub(r"[^a-z0-9+#.]+", " ", text)
+    text = re.sub(r"\s+", " ", text)
+    return text.strip()
+
+
+def calculate_overall_fit_score(match_score, skill_coverage):
+    overall_score = (skill_coverage * 0.7) + (match_score * 0.3)
+    return round(overall_score, 2)
 
 if __name__ == "__main__":
     resume = read_text_file("data/resumes/sample_resume.txt")
